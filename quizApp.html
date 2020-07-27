@@ -1,0 +1,307 @@
+<DOCTYPE html>
+  <html lang="en">
+  <head>
+    <!-- Use correct character set. -->
+    <meta charset="utf-8">
+
+    <!-- Tell IE to use the latest, best version. -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+    <!-- custom fonts and styles for the bootstrap template -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" type="text/css" rel="stylesheet"> 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"  crossorigin="anonymous">
+
+    <link href="css/sb-admin-2.css" type="text/css" rel="stylesheet">
+
+
+    <!-- the following links add the CSS and Javascript required for the Leaflet Map --> 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css"
+   integrity="sha512-wcw6ts8Anuw10Mzh9Ytw4pylW8+NAD4ch3lqm9lzAsTxg0GFeJgoAtxuCLREZSC5lUXdVyo/7yfsqFjQ4S+aKw=="
+   crossorigin=""/>
+
+    <script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet.js"
+   integrity="sha512-mNqn2Wg7tSToJhvHcqfzLMU6J4mkOImSPTxVZAdo+lcPlk+GhZmYgACEe0x35K7YzW1zJ7XyJV/TT1MrdXvMcA=="
+   crossorigin=""></script>
+
+
+  <!-- the following links incorporate the CSS required for custom icon creation -->
+  <link rel="stylesheet" href="css/ionicons.min.css">
+  <link rel="stylesheet" href="css/leaflet.awesome-markers.css">
+
+   <!-- the following links add the jQuery --> 
+   <script src="https://code.jquery.com/jquery-3.4.1.min.js"   
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="   
+  crossorigin="anonymous"></script>
+
+ <!--set the size of the map -->  
+     <style type="text/css"> 
+  #mapid { height: 180px; }
+  </style>
+
+  <!-- import D3 script file -->
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <!-- set the style for d3 graph -->
+  <style>
+
+  .bar:hover {
+    fill: slateblue;
+  }
+
+  .axis-x path {
+    display: none;
+  }
+
+  .axis text {
+    font-weight: bold;
+  }
+  </style>
+
+
+    <title>Quiz/Question APP</title>
+
+
+  </head>
+  <body id="page-top">
+    <div id="wrapper">
+
+      <!-- Sidebar -->
+      <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" >
+          <div class="sidebar-brand-text mx-3">CEGE0043 App</div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item d-block" >
+        <a class="nav-link" href="help.html" >
+            <!-- the next line is the cog image -->
+            <i class="fas fa-fw fa-cog"></i>
+            <span>User Guide</span>
+          </a>
+
+        </li>
+        <hr class="sidebar-divider">
+
+<!-- navigation bar for question setting -->
+
+        <!-- Nav Item - Pages Collapse Menu -only show in lg screen size-->
+        <li class="nav-item d-none d-lg-block" >
+          <a class="nav-link" href="#" onclick="loadMap()">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Qusition Setting</span>
+          </a>
+        </li>
+
+
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item d-none d-lg-block" >
+          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            <!-- the next line is the cog image -->
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Daily Participation rates</span>
+          </a>
+          <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+             <a class="collapse-item" href="#" onclick="AllParRate()">all users</a>          
+
+             <a class="collapse-item" href="#" onclick="UserParRate()">your users only</a>          </div>
+
+           </div>
+        </li>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item d-none d-lg-block" >
+          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"  aria-expanded="true" aria-controls="collapseTwo">
+            <!-- the next line is the cog image -->
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Stastics</span>
+          </a>
+          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+             <a class="collapse-item" href="#" onclick="lastWeekQuestion();">Last Week Questions</a>          
+
+             <a class="collapse-item" href="#" onclick="getdiffcultQ()">5 Most Difficult Questions</a>
+
+            </div>
+
+           </div>
+        </li>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <hr class="sidebar-divider">
+        <li class="nav-item d-none d-lg-block" >
+          <a class="nav-link" href="#" onclick="help()">
+            <!-- the next line is the cog image -->
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Help</span>
+          </a>
+        </li>
+
+
+<!-- navigation bar for quiz -->
+         <!-- Nav Item - Pages Collapse Menu -cannot show in lg screen size-->
+
+        <li class="nav-item d-lg-none">
+          <a class="nav-link"  href="#" onclick="loadQuizMap()">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Quiz</span>
+          </a>
+        
+        </li>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <!-- <hr class="sidebar-divider"> -->
+
+        <li class="nav-item d-lg-none">
+          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Stastics</span>
+          </a>
+          <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+             <a class="collapse-item" href="#" onclick="getRanking();">Ranking</a>          
+
+             <a class="collapse-item" href="#" onclick="Top5Scorers();">Top 5 Scorers</a>
+             <a class="collapse-item" href="#" onclick="getlastQ();">Last 5 Answered Questions</a>
+           </div>
+
+           </div>
+         </li>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <hr class="sidebar-divider">
+        <li class="nav-item d-lg-none" >
+          <a class="nav-link" href="#" onclick="help()">
+            <!-- the next line is the cog image -->
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Help</span>
+          </a>
+        </li>
+
+
+
+       </ul>
+       <!-- End of Sidebar -->
+      <div id="content-wrapper" class="d-flex flex-column">
+
+
+        <!-- <div id="mapContainer"></div> -->
+      <!-- a division for map -->
+      <div id="mapid" style="width: 1200px; height: 530px;"></div>
+      <!-- a division for question form -->
+      <div id="form" style="width: 1200px; height: 230px; ">
+        <h5 style="text-align:center;"> Enter your question</h5>
+          <div>
+            <label for="latitude">lat:</label><input type="text" size="10" id="latitude"/>
+            <label for="longitude">lng:</label><input type="text" size="10" id="longitude"/><br />
+            <label for="question_title">Question Title:</label><input type="text" size="25" id="question_title"/>
+            <label for="question_text">Question:</label><input type="text" size="45" id="question_text"/><br /> 
+            <label for="answera">Answer A:</label><input type="text" size="35" id="answera"/>
+            <label for="answerb">Answer B:</label><input type="text" size="35" id="answerb"/><br /> 
+            <label for="answerc">Answer C:</label><input type="text" size="35" id="answerc"/> 
+            <label for="answerd">Answer D:</label><input type="text" size="35" id="answerd"/><br />
+            <div> correct answer:<select id="correct" style="width: 150px" >
+              <option value="1">A</option>
+              <option value="2">B</option>
+              <option value="3">C</option>
+              <option value="4">D</option>
+            </select>
+            </div>
+
+            <button id="startUpload" onclick="startDataUpload()" style="float:left">Start Data Upload</button> 
+            <div id="dataUploadResult" style="float:left">The result of the upload goes here</div>
+            <button id="showQuestion" onclick="getQuestion()" style="float:left">Show Questions</button> 
+            <button id="removeQuestion" onclick="removeQuestion()" style="float:left">Remove Questions</button> 
+<!--        <label for="deleteID" float:left>Delete ID</label><input type="text" size="20" id="deleteID" float:left/>
+            <button id="startDelete" onclick="deleteRecord()" >Delete Record</button>
+            <div id="dataDeleteResult" >The result of the upload goes here</div> -->
+
+          </div>
+      </div><!-- end of question form -->
+      <!-- a division for top 5 table -->
+      <div id="top5table"></div>
+      <!-- a division for user dpr -->
+      <div ><svg id="UserPar" width="800" height="500"></svg></div>
+      <!-- a division for all user dpr -->
+      <div ><svg id="AllPar" width="800" height="500"></svg></div>
+      <!-- a button to remove last week question -->
+      <button id="removeLastWeekQuestion" onclick="removeLastWeekLayer()" style="float:left">Remove Last Week Questions</button>
+      <!-- a button to get 5 closest questions -->
+      <button id="closest5" onclick="get5ClosestQuestions()" style="float:left">Get 5 closest questions</button> 
+      <!-- a button to 5 closest questions -->
+      <button id="removeClosest5" onclick="removeClosestQuestionsLayer()" style="float:left">Remove 5 closest questions</button> 
+      <!-- a division for datatable -->
+      <div id="datatable"></div>
+      <!-- a button to remove 5 last answered questions -->
+      <button id="removeLastQuestion" onclick="removeLastAnswered()" style="float:left">Remove last answered Questions</button>
+<!--       <div id="positioning">
+        <div id='showLocation'>Location will be displayed here</div>
+        <button id='trackLocation' onclick='trackLocation()'>Click Me to Get your Location</button>
+      </div> -->
+
+        <div id="helpPage">
+          <h1 style="text-align:center;">Help page</h1>
+          <!-- a button to load help.html -->
+          <button onclick="window.location.href='help.html'" style="width:1190px;height:100px;float:left">User Guide</button>
+          <!-- a button to load github page -->
+          <button onclick="location.href='https://github.com/ucl-geospatial/cege0043-apps-xspmt'" type="button" style="width:1190px;height:100px;"> View Source </button>
+        </div>
+
+      <!-- End of Main Content -->
+    </div>
+    <!-- end of wrapper -->
+
+  </body>
+  <script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>  
+
+
+  
+  <!-- Bootstrap core JavaScript-->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+  <script src="js/sb-admin-2.js"></script>
+
+
+<!-- functionality to get ports -->
+<!-- all the javascripts files are below  -->
+<script src="js/utilities.js"></script> 
+<script src="js/menu.js"></script> 
+<script src="js/leaflet.awesome-markers.js"></script> 
+<script src="js/loadQuestion.js"></script> 
+<script src="js/getDistance.js"></script>
+<script src="js/getLocation.js"></script>
+<script src="js/trackLocation.js"></script>  
+<script src="js/basicMap.js"></script>
+<script src="js/dataUpload.js"></script>
+<script src="js/correctNum.js"></script>
+<script src="js/getRanking.js"></script>
+<script src="js/get5Closest.js"></script>
+<script src="js/get5difficult.js"></script>
+<script src="js/Last5Question.js"></script>
+<script src="js/proximityAlert.js"></script>
+<script src="js/participation.js"></script>
+
+<script>
+
+// load map when page open
+document.addEventListener('DOMContentLoaded', function() {
+  loadMap();
+}, false);
+document.addEventListener('DOMContentLoaded', function() {
+  startPage();
+}, false);
+
+
+
+</script>
+
+  </html>
